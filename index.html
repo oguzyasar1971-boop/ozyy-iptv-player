@@ -53,12 +53,24 @@ video {
 <input id="m3u" placeholder="M3U link gir">
 <br>
 <button onclick="play()">Yayın Aç</button>
+<br><br>
 
+<button onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">Test Kanal</button>
 <video id="player" controls autoplay></video>
 
 <script>
 function play(){
   const url = document.getElementById("m3u").value;
+  const video = document.getElementById("player");
+
+  if(Hls.isSupported()){
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  } else {
+    video.src = url;
+  }
+}function playChannel(url){
   const video = document.getElementById("player");
 
   if(Hls.isSupported()){
