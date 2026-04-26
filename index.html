@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Ozyy IPTV Player</title>
-
+<div class="menu">
+  <div>📺 Canlı TV</div>
+  <div>🎬 Film</div>
+  <div>📺 Dizi</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
@@ -20,6 +24,25 @@ header {
   padding:15px;
   font-size:20px;
   font-weight:bold;
+}.menu {
+  display:flex;
+  justify-content:space-around;
+  background:#1e293b;
+  padding:10px;
+}.menu div {
+  cursor:pointer;
+}
+
+.menu div:hover {
+  color:#06b6d4;
+}
+
+.menu div {
+  cursor:pointer;
+}
+
+.menu div:hover {
+  color:#06b6d4;
 }
 
 input {
