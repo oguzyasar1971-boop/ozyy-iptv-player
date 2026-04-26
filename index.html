@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ozyy IPTV Player</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+body {
+  margin:0;
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+header {
+  background:#06b6d4;
+  padding:15px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+input {
+  width:80%;
+  padding:10px;
+  margin:15px;
+  border-radius:10px;
+  border:none;
+}
+
+button {
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:#06b6d4;
+  color:white;
+  font-size:16px;
+}
+
+video {
+  width:100%;
+  margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Ozyy IPTV Player</header>
+
+<input id="m3u" placeholder="M3U link gir">
+<br>
+<button onclick="play()">Yayın Aç</button>
+
+<video id="player" controls autoplay></video>
+
+<script>
+function play(){
+  const url = document.getElementById("m3u").value;
+  const video = document.getElementById("player");
+
+  if(Hls.isSupported()){
+    const hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  } else {
+    video.src = url;
+  }
+}
+</script>
+
+</body>
+</html>
