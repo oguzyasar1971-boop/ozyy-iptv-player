@@ -92,13 +92,18 @@ video {
 <header>Ozyy IPTV Player</header>
 
 <input id="m3u" placeholder="M3U link gir">
+<br>
+<button onclick="loadM3U()">M3U Liste Yükle</button>
+
 <br><br>
 
-<input type="file" id="fileInput" accept=".m3u,.txt">
+<input id="server" placeholder="Xtream Server örn: http://site.com:8080">
 <br>
-
-<button onclick="loadM3U()">Linkten Liste Yükle</button>
-<button onclick="loadM3UFile()">Dosyadan Liste Yükle</button>
+<input id="username" placeholder="Kullanıcı adı">
+<br>
+<input id="password" placeholder="Şifre" type="password">
+<br>
+<button onclick="loadXtream()">Xtream Codes Giriş</button>
 
   <div class="card" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">TRT 1</div>
 
@@ -181,6 +186,42 @@ async function loadM3UFile(){
 
   const text = await file.text();
   parseM3U(text);
+}
+  async function loadXtream(){
+  const server = document.getElementById("server").value;
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  if(!server || !user || !pass){
+    alert("Bilgileri doldur!");
+    return;
+  }
+
+  try{
+    const res = await fetch(`${server}/player_api.php?username=${user}&password=${pass}`);
+    const data = await res.json();
+
+    let channelsHTML = "";
+
+    // live channels çekiyoruz
+    const liveRes = await fetch(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`);
+    const channels = await liveRes.json();
+
+    for(let ch of channels){
+      const link = `${server}/live/${user}/${pass}/${ch.stream_id}.m3u8`;
+
+      channelsHTML += `
+        <div class="card" onclick="playChannel('${link}')">
+          ${ch.name}
+        </div>
+      `;
+    }
+
+    document.getElementById("tv").innerHTML = channelsHTML;
+
+  }catch(e){
+    alert("Bağlantı hatası (CORS olabilir)");
+  }
 }
 </script>
 
