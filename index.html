@@ -146,19 +146,19 @@ function parseM3U(text){
   let channelsHTML = "";
 
   for(let i=0; i<lines.length; i++){
-   if(lines[i].includes("#EXTINF")){
-      const name = lines[i].split(",")[1] || "Kanal";
-      if(link && link.startsWith("http")){
+  if(lines[i].includes("#EXTINF")){
+    const name = lines[i].split(",")[1] || "Kanal";
+    const link = (lines[i+1] || "").trim();
 
-      if(link.startsWith("http")){
-        channelsHTML += `
-          <div class="card" onclick="playChannel('${link}')">
-            ${name}
-          </div>
-        `;
-      }
-    }
+    if(!link.startsWith("http")) continue;
+
+    channelsHTML += `
+      <div class="card" onclick="playChannel('${link}')">
+        ${name}
+      </div>
+    `;
   }
+}
 
   document.getElementById("tv").innerHTML = channelsHTML;
 }
