@@ -155,6 +155,31 @@ function show(type){
 
   document.getElementById(type).style.display = "block";
 }
+  async function loadM3U(){
+  const url = document.getElementById("m3u").value;
+
+  const res = await fetch(url);
+  const text = await res.text();
+
+  const lines = text.split("\n");
+
+  let channelsHTML = "";
+
+  for(let i=0; i<lines.length; i++){
+    if(lines[i].startsWith("#EXTINF")){
+      const name = lines[i].split(",")[1];
+      const link = lines[i+1];
+
+      channelsHTML += `
+        <div class="card" onclick="playChannel('${link}')">
+          ${name}
+        </div>
+      `;
+    }
+  }
+
+  document.getElementById("tv").innerHTML = channelsHTML;
+}
 </script>
 
 </body>
