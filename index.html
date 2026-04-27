@@ -148,7 +148,7 @@ function parseM3U(text){
   for(let i=0; i<lines.length; i++){
    if(lines[i].includes("#EXTINF")){
       const name = lines[i].split(",")[1] || "Kanal";
-      const link = (lines[i+1] || "").trim();
+      if(link && link.startsWith("http")){
 
       if(link.startsWith("http")){
         channelsHTML += `
