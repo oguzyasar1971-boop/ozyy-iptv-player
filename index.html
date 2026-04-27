@@ -92,10 +92,13 @@ video {
 <header>Ozyy IPTV Player</header>
 
 <input id="m3u" placeholder="M3U link gir">
-<br>
-<button onclick="play()">Yayın Aç</button>
+<br><br>
 
-<div id="tv" class="channels">
+<input type="file" id="fileInput" accept=".m3u,.txt">
+<br>
+
+<button onclick="loadM3U()">Linkten Liste Yükle</button>
+<button onclick="loadM3UFile()">Dosyadan Liste Yükle</button>
 
   <div class="card" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">TRT 1</div>
 
@@ -119,19 +122,6 @@ video {
 <video id="player" controls autoplay></video>
 
 <script>
-function play(){
-  const url = document.getElementById("m3u").value;
-  const video = document.getElementById("player");
-
-  if(Hls.isSupported()){
-    const hls = new Hls();
-    hls.loadSource(url);
-    hls.attachMedia(video);
-  } else {
-    video.src = url;
-  }
-}
-
 function playChannel(url){
   const video = document.getElementById("player");
 
@@ -148,35 +138,52 @@ function show(type){
   document.getElementById("tv").style.display = "none";
   document.getElementById("film").style.display = "none";
   document.getElementById("dizi").style.display = "none";
-
   document.getElementById(type).style.display = "block";
 }
-  async function loadM3U(){
-  const url = document.getElementById("m3u").value;
 
-  const res = await fetch(url);
-  const text = await res.text();
-
+function parseM3U(text){
   const lines = text.split("\n");
-
   let channelsHTML = "";
 
   for(let i=0; i<lines.length; i++){
     if(lines[i].startsWith("#EXTINF")){
-      const name = lines[i].split(",")[1];
-      const link = lines[i+1];
+      const name = lines[i].split(",")[1] || "Kanal";
+      const link = (lines[i+1] || "").trim();
 
-      channelsHTML += `
-        <div class="card" onclick="playChannel('${link}')">
-          ${name}
-        </div>
-      `;
+      if(link.startsWith("http")){
+        channelsHTML += `
+          <div class="card" onclick="playChannel('${link}')">
+            ${name}
+          </div>
+        `;
+      }
     }
   }
 
   document.getElementById("tv").innerHTML = channelsHTML;
 }
+
+async function loadM3U(){
+  const url = document.getElementById("m3u").value;
+  const res = await fetch(url);
+  const text = await res.text();
+  parseM3U(text);
+}
+
+async function loadM3UFile(){
+  const fileInput = document.getElementById("fileInput");
+  const file = fileInput.files[0];
+
+  if(!file){
+    alert("Dosya seç!");
+    return;
+  }
+
+  const text = await file.text();
+  parseM3U(text);
+}
 </script>
 
 </body>
 </html>
+  
