@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+<head>
 <meta charset="UTF-8">
 <title>Ozyy IPTV Player</title>
-<div class="menu">
-  <div onclick="show('tv')">📺 Canlı TV</div>
-  <div onclick="show('film')">🎬 Film</div>
-  <div onclick="show('dizi')">📺 Dizi</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
+<link rel="manifest" href="./manifest.json">
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+  
 <style>
-body {
+body 
+  {
   margin:0;
   background:#0f172a;
   color:white;
@@ -224,7 +225,10 @@ async function loadM3UFile(){
   }
 }
 </script>
-
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 </body>
 </html>
   
