@@ -1,138 +1,155 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Ozyy IPTV Player</title>
-
-<link rel="manifest" href="./manifest.json">
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-</head>
+<title>Ozyy TV Player</title>
   
 <style>
-body 
-  {
-  margin:0;
-  background:#0f172a;
-  color:white;
-  font-family:Arial;
-  text-align:center;
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #073b6d, #020617 70%);
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
-  header {
-  background:#06b6d4;
-  padding:15px;
-  font-size:20px;
-  font-weight:bold;
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.menu {
-  display:flex;
-  justify-content:space-around;
-  background:#1e293b;
-  padding:10px;
+.logo {
+  text-align: center;
+  margin-bottom: 25px;
 }
 
-.menu div {
-  cursor:pointer;
+.play-icon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 40px;
+  box-shadow: 0 0 35px #06b6d4;
 }
 
-.menu div:hover {
-  color:#06b6d4;
+.logo h1 {
+  margin-bottom: 5px;
 }
 
-input {
-  width:80%;
-  padding:10px;
-  margin:15px;
-  border-radius:10px;
-  border:none;
+.logo p {
+  color: #94a3b8;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 button {
-  padding:10px 20px;
-  border:none;
-  border-radius:10px;
-  background:#06b6d4;
-  color:white;
-  font-size:16px;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  color: white;
+  border: none;
+  padding: 13px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-video {
-  width:100%;
-  margin-top:20px;
-}video {
-  width:100%;
-  margin-top:20px;
+.login-box {
+  width: 330px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #38bdf8;
+  border-radius: 22px;
+  padding: 25px;
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.35);
 }
 
-.channels {
-  display:grid;
-  grid-template-columns: repeat(2,1fr);
-  gap:10px;
-  padding:10px;
+.login-box h2 {
+  text-align: center;
 }
 
-.card {
-  background:#1e293b;
-  padding:15px;
-  border-radius:10px;
-  cursor:pointer;
-  text-align:center;
+input {
+  width: 100%;
+  padding: 13px;
+  margin: 9px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
 }
 
-.card:hover {
-  background:#06b6d4;
+.login-box button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.hidden {
+  display: none;
+}
+
+.top-menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: #020617;
+}
+
+#video {
+  width: 85%;
+  margin: 20px auto;
+  display: block;
+  border-radius: 15px;
+  background: black;
+}
+
+#channels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
+}
+
+.channel {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.channel:hover {
+  background: #06b6d4;
 }
 </style>
-</head>
-
-<body>
-
-<header>Ozyy IPTV Player</header>
-
-<input id="m3u" placeholder="M3U link gir">
-<br>
-<button onclick="loadM3U()">M3U Liste Yükle</button>
-
-<br><br>
-
-<input id="server" placeholder="Xtream Server örn: http://site.com:8080">
-<br>
-<input id="username" placeholder="Kullanıcı adı">
-<br>
-<input id="password" placeholder="Şifre" type="password">
-<br>
-<button onclick="loadXtream()">Xtream Codes Giriş</button>
-
-  <div class="card" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">TRT 1</div>
-
-  <div class="card" onclick="playChannel('https://test-streams.mux.dev/test_001/stream.m3u8')">SHOW TV</div>
-
-  <div class="card" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">ATV</div>
-
-  <div class="card" onclick="playChannel('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">KANAL D</div>
-
-  <div class="card" onclick="playChannel('https://test-streams.mux.dev/test_001/stream.m3u8')">TV8</div>
-
-</div>
-
-<div id="film" style="display:none;">
-  <h2>Film bölümü</h2>
-</div>
-
-<div id="dizi" style="display:none;">
-  <h2>Dizi bölümü</h2>
-</div>
-<video id="player" controls autoplay></video>
-
+  
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
-function playChannel(url){
-  const video = document.getElementById("player");
+let video;
 
-  if(Hls.isSupported()){
-    const hls = new Hls();
+function showTab(tab) {
+  document.getElementById("xtream").classList.add("hidden");
+  document.getElementById("m3u").classList.add("hidden");
+  document.getElementById("mac").classList.add("hidden");
+
+  document.getElementById(tab).classList.remove("hidden");
+}
+
+function openApp() {
+  document.querySelector(".login-screen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  video = document.getElementById("video");
+}
+
+function playStream(url) {
+  if (Hls.isSupported()) {
+    let hls = new Hls();
     hls.loadSource(url);
     hls.attachMedia(video);
   } else {
@@ -140,95 +157,131 @@ function playChannel(url){
   }
 }
 
-function show(type){
-  document.getElementById("tv").style.display = "none";
-  document.getElementById("film").style.display = "none";
-  document.getElementById("dizi").style.display = "none";
-  document.getElementById(type).style.display = "block";
-}
+async function loadXtream() {
+  let server = document.getElementById("server").value.trim();
+  let user = document.getElementById("username").value.trim();
+  let pass = document.getElementById("password").value.trim();
 
-function parseM3U(text){
-  const lines = text.split("\n");
-  let channelsHTML = "";
-
-  for(let i=0; i<lines.length; i++){
-  if(lines[i].includes("#EXTINF")){
-    const name = lines[i].split(",")[1] || "Kanal";
-    const link = (lines[i+1] || "").trim();
-
-    if(!link.startsWith("http")) continue;
-
-    channelsHTML += `
-      <div class="card" onclick="playChannel('${link}')">
-        ${name}
-      </div>
-    `;
-  }
-}
-
-  document.getElementById("tv").innerHTML = channelsHTML;
-}
-
-async function loadM3U(){
-  const url = document.getElementById("m3u").value;
-  const res = await fetch(url);
-  const text = await res.text();
-  parseM3U(text);
-}
-
-async function loadM3UFile(){
-  const fileInput = document.getElementById("fileInput");
-  const file = fileInput.files[0];
-
-  if(!file){
-    alert("Dosya seç!");
+  if (!server || !user || !pass) {
+    alert("Server, username ve password yaz");
     return;
   }
 
-  const text = await file.text();
-  parseM3U(text);
-}
-  async function loadXtream(){
-  const server = document.getElementById("server").value;
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
+  openApp();
 
-  if(!server || !user || !pass){
-    alert("Bilgileri doldur!");
+  let res = await fetch(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`);
+  let channels = await res.json();
+
+  showChannels(channels.map(ch => ({
+    name: ch.name,
+    url: `${server}/live/${user}/${pass}/${ch.stream_id}.m3u8`
+  })));
+}
+
+async function loadM3U() {
+  let url = document.getElementById("m3uUrl").value.trim();
+
+  if (!url) {
+    alert("M3U URL yaz");
     return;
   }
 
-  try{
-    const res = await fetch(`${server}/player_api.php?username=${user}&password=${pass}`);
-    const data = await res.json();
+  openApp();
 
-    let channelsHTML = "";
+  let res = await fetch(url);
+  let text = await res.text();
 
-    // live channels çekiyoruz
-    const liveRes = await fetch(`${server}/player_api.php?username=${user}&password=${pass}&action=get_live_streams`);
-    const channels = await liveRes.json();
+  let channels = parseM3U(text);
+  showChannels(channels);
+}
 
-    for(let ch of channels){
-      const link = `${server}/live/${user}/${pass}/${ch.stream_id}.m3u8`;
+function parseM3U(data) {
+  let lines = data.split("\n");
+  let channels = [];
 
-      channelsHTML += `
-        <div class="card" onclick="playChannel('${link}')">
-          ${ch.name}
-        </div>
-      `;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith("#EXTINF")) {
+      let name = lines[i].split(",")[1] || "Kanal";
+      let url = lines[i + 1];
+
+      if (url && url.startsWith("http")) {
+        channels.push({ name, url });
+      }
     }
-
-    document.getElementById("tv").innerHTML = channelsHTML;
-
-  }catch(e){
-    alert("Bağlantı hatası (CORS olabilir)");
   }
+
+  return channels;
 }
-</script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+
+function showChannels(channels) {
+  let container = document.getElementById("channels");
+  container.innerHTML = "";
+
+  channels.forEach(ch => {
+    let div = document.createElement("div");
+    div.className = "channel";
+    div.innerText = ch.name;
+    div.onclick = () => playStream(ch.url);
+    container.appendChild(div);
+  });
 }
-</script>
+<body>
+
+<div class="login-screen">
+
+  <div class="logo">
+    <div class="play-icon">▶</div>
+    <h1>Ozyy TV Player</h1>
+    <p>Premium IPTV Experience</p>
+  </div>
+
+  <div class="tabs">
+    <button onclick="showTab('xtream')">Xtream</button>
+    <button onclick="showTab('m3u')">M3U</button>
+    <button onclick="showTab('mac')">MAC</button>
+  </div>
+
+  <div id="xtream" class="login-box">
+    <h2>Xtream Codes Login</h2>
+    <input id="server" placeholder="Server URL">
+    <input id="username" placeholder="Username">
+    <input id="password" placeholder="Password" type="password">
+    <button onclick="loadXtream()">Giriş Yap</button>
+  </div>
+
+  <div id="m3u" class="login-box hidden">
+    <h2>M3U Playlist</h2>
+    <input id="m3uUrl" placeholder="M3U URL">
+    <button onclick="loadM3U()">Playlist Yükle</button>
+  </div>
+
+  <div id="mac" class="login-box hidden">
+    <h2>MAC Address Login</h2>
+    <input id="mac1" placeholder="MAC Address 1">
+    <input id="mac2" placeholder="MAC Address 2">
+    <input placeholder="Portal URL">
+    <button onclick="alert('MAC sistemi sonra backend ile eklenecek')">Devam Et</button>
+  </div>
+
+</div>
+
+<div id="app" class="hidden">
+
+  <div class="top-menu">
+    <button>LIVE TV</button>
+    <button>EPG</button>
+    <button>VOD</button>
+    <button>SERIES</button>
+    <button>FAVORITE</button>
+    <button>SETTINGS</button>
+  </div>
+
+  <video id="video" controls autoplay></video>
+
+  <div id="channels"></div>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
-  
